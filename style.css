@@ -11,6 +11,8 @@ Text Domain: hp
 Tags:
 */
 
+@font-face { font-family: 'Orator'; src: url('./font/OratorStd.eot?#iefix') format('embedded-opentype'), url('./font/OratorStd.otf') format('opentype'), url('./font/OratorStd.woff') format('woff'), url('./font/OratorStd.ttf') format('truetype'), url('./font/OratorStd.svg#OratorStd') format('svg'); font-weight: normal; font-style: normal; }
+
 @font-face {
     font-family: "Flaticon";
     src: url("./font/Flaticon.eot");
@@ -57,6 +59,10 @@ body {
 
 a{
 	text-decoration: none;
+}
+
+.orator{
+	font-family: Orator;
 }
 
 .wrapper{
@@ -144,8 +150,12 @@ a{
 /*--------------------------------------------------------------
 # 3 dernière actualités
 --------------------------------------------------------------*/
-#accueil_actu{
-
+.article_container {
+	float: left;
+	padding: 10px;
+	box-sizing: border-box;
+	height: 150px;
+	width: 33%;
 }
 
 /*--------------------------------------------------------------
