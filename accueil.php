@@ -6,7 +6,7 @@ Template Name: Accueil
 
 get_header(); ?>
 <section id="accueil_actu" class="clearfix">
-    <h1 class="orator">Actualités</h1>
+    <h1>Actualités</h1>
     <?php query_posts('showposts=3'); if (have_posts()) : while (have_posts()) : the_post(); ?>
         <div class="article_container">
             <?php the_thumb_url() ?>

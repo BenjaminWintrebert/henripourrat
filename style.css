@@ -61,10 +61,6 @@ a{
 	text-decoration: none;
 }
 
-.orator{
-	font-family: Orator;
-}
-
 .wrapper{
 	width:80%;
 	margin: 0 auto;
@@ -78,6 +74,12 @@ a{
 
 .clearfix:after{
 	clear:both;
+}
+
+h1{
+	text-align: center;
+	font-family: Orator;
+	color: #6a6a6a;
 }
 
 /*--------------------------------------------------------------
@@ -106,6 +108,7 @@ a{
 }
 
 .main-navigation ul {
+	font-family: Orator;
 	list-style: none;
 	margin: 0;
 	padding-left: 0;
@@ -123,6 +126,15 @@ a{
 .main-navigation a {
 	display: block;
 	text-decoration: none;
+	color: #414141;
+}
+
+.main-navigation li:hover{
+	border-bottom: solid 3px #414141;
+}
+
+.main-navigation li.current-menu-item{
+	border-bottom: solid 3px #414141;
 }
 
 .main-navigation ul ul {
