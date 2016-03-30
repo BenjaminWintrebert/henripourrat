@@ -166,8 +166,26 @@ h1{
 	float: left;
 	padding: 10px;
 	box-sizing: border-box;
-	height: 150px;
 	width: 33%;
+}
+
+.left {
+	float: left;
+	width: 50%;
+	padding-bottom: 50%;
+	background-color: #d9d6d6;
+	position: relative;
+}
+
+.left .text{
+	position: absolute;
+	width: 100%;
+}
+
+.thumb_article
+{
+	background-size: cover;
+	background-position: center center;
 }
 
 /*--------------------------------------------------------------
