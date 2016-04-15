@@ -115,6 +115,17 @@ h1{
 	border-color: transparent #d9d6d6 transparent transparent;
 }
 
+.triangle_bottom {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 40px 50px 0 50px;
+	border-color: #406c5b transparent transparent transparent;
+	position: absolute;
+	bottom: -30px;
+	left: 50%;
+	transform: translateX(-50%);
+}
 /*--------------------------------------------------------------
 ## Menus
 --------------------------------------------------------------*/
@@ -273,6 +284,94 @@ h1{
 }
 
 /*--------------------------------------------------------------
+# Quote
+--------------------------------------------------------------*/
+
+#quote {
+	height: 300px;
+	background: #406c5b;
+	position: relative;
+}
+
+#quote p{
+	color: #fff;
+}
+
+#citation {
+	font-size: 3em;
+	font-style: italic;
+	position: absolute;
+	top: 40%;
+	transform: translateY(-50%);
+	width: 100%;
+}
+#citation:before {
+	 content: '«';
+	 color: white;
+	 margin-right: 5px;
+ }
+#citation:after {
+	content: '»';
+	color: white;
+	margin-right: 5px;
+}
+
+#auteur {
+	position: absolute;
+	width: 100%;
+	bottom: 10%;
+}
+
+#quote p {
+	color: #fff;
+	text-align: center;
+	font-family: serif;
+	margin: 0;
+}
+
+
+/*--------------------------------------------------------------
+# Coverflow
+--------------------------------------------------------------*/
+
+#coverflow-section{
+	background-color: #212121;
+}
+
+#coverflow-container {
+	padding-top: 60px;
+}
+
+.ui-coverflow-wrapper{
+	height:400px;
+}
+.ui-state-active{
+	border:0px;
+}
+
+#coverflow-background{
+	padding:10px;
+	background-color:#cccccc;
+}
+
+#coverflow img{
+	width:240px;
+	height:318px;
+}
+
+#coverflow-controls {
+	position: absolute;
+	left: 50%;
+	z-index: 50;
+	transform: translateX(-50%);
+	bottom: 30px;
+}
+
+#coverflow-controls i{
+	padding:20px;
+}
+
+/*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
 
@@ -286,6 +385,11 @@ h1{
 #social-network{
 	height:207px;
 	background-color: #406c5b;
+}
+
+#social-network a {
+	width: 25%;
+	float: left;
 }
 
 #link-footer{
