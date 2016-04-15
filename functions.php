@@ -120,6 +120,8 @@ function hp_scripts() {
 
 	wp_enqueue_script( 'hp-skip-link-focus-fix', get_template_directory_uri() . '/js/skip-link-focus-fix.js', array(), '20130115', true );
 
+	wp_enqueue_script("jquery");
+
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
@@ -193,56 +195,87 @@ function my_custom_post_livre() {
 }
 add_action( 'init', 'my_custom_post_livre' );
 
-/* Custom Post Actu */
+class HenriPourrat {
+	private $henri_pourrat_options;
 
-function my_custom_post_actu() {
-	$labels = array(
-		'name'               => _x( 'Actualités', 'post type general name' ),
-		'singular_name'      => _x( 'actualité', 'post type singular name' ),
-		'add_new'            => _x( 'Ajouter', 'book' ),
-		'add_new_item'       => __( 'Ajouter une actualitée' ),
-		'edit_item'          => __( 'Modifié une actualitée' ),
-		'new_item'           => __( 'Nouvelle actualitée' ),
-		'all_items'          => __( 'Toutes les actualitée' ),
-		'view_item'          => __( 'Voir actualitée' ),
-		'search_items'       => __( 'Rechercher une actualitée' ),
-		'not_found'          => __( 'Aucune actualitée trouvé' ),
-		'not_found_in_trash' => __( 'Aucune actualitée dans la corbeille' ),
-		'parent_item_colon'  => '',
-		'menu_name'          => 'Actualités'
-	);
-	$args = array(
-		'labels'        => $labels,
-		'hirarchical' => false,
-		'description'   => 'Actualités',
-		'public'        => true,
-		'menu_position' => 6,
-		'supports'      => array(),
-		'has_archive'   => true,
-		'taxonomies' => array ()
-	);
-	register_post_type( 'actualité', $args );
+	public function __construct() {
+		add_action( 'admin_menu', array( $this, 'henri_pourrat_add_plugin_page' ) );
+		add_action( 'admin_init', array( $this, 'henri_pourrat_page_init' ) );
+	}
+
+	public function henri_pourrat_add_plugin_page() {
+		add_menu_page(
+			'Henri Pourrat', // page_title
+			'Henri Pourrat', // menu_title
+			'manage_options', // capability
+			'henri-pourrat', // menu_slug
+			array( $this, 'henri_pourrat_create_admin_page' ), // function
+			'dashicons-hammer', // icon_url
+			3 // position
+		);
+	}
+
+	public function henri_pourrat_create_admin_page() {
+		$this->henri_pourrat_options = get_option( 'henri_pourrat_option_name' ); ?>
+
+		<div class="wrap">
+			<h2>Henri Pourrat</h2>
+			<p></p>
+			<?php settings_errors(); ?>
+
+			<form method="post" action="options.php">
+				<?php
+				settings_fields( 'henri_pourrat_option_group' );
+				do_settings_sections( 'henri-pourrat-admin' );
+				submit_button();
+				?>
+			</form>
+		</div>
+	<?php }
+
+	public function henri_pourrat_page_init() {
+		register_setting(
+			'henri_pourrat_option_group', // option_group
+			'henri_pourrat_option_name', // option_name
+			array( $this, 'henri_pourrat_sanitize' ) // sanitize_callback
+		);
+
+		add_settings_section(
+			'henri_pourrat_setting_section', // id
+			'Settings', // title
+			array( $this, 'henri_pourrat_section_info' ), // callback
+			'henri-pourrat-admin' // page
+		);
+
+		add_settings_field(
+			'citations_1_par_lignes_0', // id
+			'Citations (1 par lignes) ', // title
+			array( $this, 'citations_1_par_lignes_0_callback' ), // callback
+			'henri-pourrat-admin', // page
+			'henri_pourrat_setting_section' // section
+		);
+	}
+
+	public function henri_pourrat_sanitize($input) {
+		$sanitary_values = array();
+		if ( isset( $input['citations_1_par_lignes_0'] ) ) {
+			$sanitary_values['citations_1_par_lignes_0'] = esc_textarea( $input['citations_1_par_lignes_0'] );
+		}
+
+		return $sanitary_values;
+	}
+
+	public function henri_pourrat_section_info() {
+
+	}
+
+	public function citations_1_par_lignes_0_callback() {
+		printf(
+			'<textarea class="large-text" rows="15" name="henri_pourrat_option_name[citations_1_par_lignes_0]" id="citations_1_par_lignes_0" placeholder="citation - livres">%s</textarea>',
+			isset( $this->henri_pourrat_options['citations_1_par_lignes_0'] ) ? esc_attr( $this->henri_pourrat_options['citations_1_par_lignes_0']) : ''
+		);
+	}
+
 }
-add_action( 'init', 'my_custom_post_actu' );
-
-/* Custom Post Paramètres */
-
-function my_custom_post_parametre() {
-	$labels = array(
-		'name'               => _x( 'Paramètres', 'post type general name' ),
-		'singular_name'      => _x( 'paramètre', 'post type singular name' ),
-		'menu_name'          => 'Paramètres'
-	);
-	$args = array(
-		'labels'        => $labels,
-		'hirarchical' => false,
-		'description'   => 'Paramètres',
-		'public'        => true,
-		'menu_position' => 6,
-		'supports'      => array(),
-		'has_archive'   => true,
-		'taxonomies' => array ()
-	);
-	register_post_type( 'paramètre', $args );
-}
-add_action( 'init', 'my_custom_post_parametre' );
+if ( is_admin() )
+	$henri_pourrat = new HenriPourrat();
