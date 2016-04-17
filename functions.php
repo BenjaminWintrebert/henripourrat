@@ -195,6 +195,67 @@ function my_custom_post_livre() {
 }
 add_action( 'init', 'my_custom_post_livre' );
 
+function my_custom_post_event() {
+	$labels = array(
+		'name'               => _x( 'Evénement', 'post type general name' ),
+		'singular_name'      => _x( 'event', 'post type singular name' ),
+		'add_new'            => _x( 'Ajouter', 'event' ),
+		'add_new_item'       => __( 'Ajouter un nouvel événement' ),
+		'edit_item'          => __( 'Éditer l\'événement' ),
+		'new_item'           => __( 'Nouvel événement' ),
+		'all_items'          => __( 'Tout les événement' ),
+		'view_item'          => __( 'Voir l\'événement' ),
+		'search_items'       => __( 'Rechercher un événement' ),
+		'not_found'          => __( 'Aucun événement trouvé' ),
+		'not_found_in_trash' => __( 'Aucun événement dans la corbeille' ),
+		'parent_item_colon'  => '',
+		'menu_name'          => 'Événement'
+	);
+	$args = array(
+		'labels'        => $labels,
+		'hirarchical' => false,
+		'description'   => 'Événement',
+		'public'        => true,
+		'menu_position' => 6,
+		'supports'      => array(),
+		'has_archive'   => true,
+		'taxonomies' => array ()
+	);
+	register_post_type( 'event', $args );
+}
+add_action( 'init', 'my_custom_post_event' );
+
+function month($date){
+	$mois = array(1=>'janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre');
+	preg_match('/(\d{1,2}) (\d{1,2}) (\d{4})/i', $date, $output);
+	return $output[1].' '.$mois[$output[2]].' '.$output[3];
+}
+
+function blog_favicon() {
+	echo '<link rel="apple-touch-icon" sizes="57x57" href="'.get_template_directory_uri().'/img/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="'.get_template_directory_uri().'/img/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="'.get_template_directory_uri().'/img/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="'.get_template_directory_uri().'/img/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="'.get_template_directory_uri().'/img/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="'.get_template_directory_uri().'/img/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="'.get_template_directory_uri().'/img/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="'.get_template_directory_uri().'/img/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="'.get_template_directory_uri().'/img/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="'.get_template_directory_uri().'/img/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="'.get_template_directory_uri().'/img/favicon-194x194.png" sizes="194x194">
+    <link rel="icon" type="image/png" href="'.get_template_directory_uri().'/img/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="'.get_template_directory_uri().'/img/android-chrome-192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="'.get_template_directory_uri().'/img/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="'.get_template_directory_uri().'/img/manifest.json">
+    <link rel="mask-icon" href="'.get_template_directory_uri().'/img/safari-pinned-tab.svg" color="#000000">
+    <link rel="shortcut icon" href="'.get_template_directory_uri().'/img/favicon.ico">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="msapplication-TileImage" content="'.get_template_directory_uri().'/img/mstile-144x144.png">
+    <meta name="msapplication-config" content="'.get_template_directory_uri().'/img/browserconfig.xml">
+    <meta name="theme-color" content="#7dedc2">';
+}
+add_action('wp_head', 'blog_favicon');
+
 class HenriPourrat {
 	private $henri_pourrat_options;
 
@@ -211,7 +272,7 @@ class HenriPourrat {
 			'henri-pourrat', // menu_slug
 			array( $this, 'henri_pourrat_create_admin_page' ), // function
 			'dashicons-hammer', // icon_url
-			3 // position
+			100 // position
 		);
 	}
 
@@ -249,8 +310,16 @@ class HenriPourrat {
 
 		add_settings_field(
 			'citations_1_par_lignes_0', // id
-			'Citations (1 par lignes) ', // title
+			'Citations (1 par lignes)	', // title
 			array( $this, 'citations_1_par_lignes_0_callback' ), // callback
+			'henri-pourrat-admin', // page
+			'henri_pourrat_setting_section' // section
+		);
+
+		add_settings_field(
+			'mini_bio_1', // id
+			'Mini-bio', // title
+			array( $this, 'mini_bio_1_callback' ), // callback
 			'henri-pourrat-admin', // page
 			'henri_pourrat_setting_section' // section
 		);
@@ -262,6 +331,10 @@ class HenriPourrat {
 			$sanitary_values['citations_1_par_lignes_0'] = esc_textarea( $input['citations_1_par_lignes_0'] );
 		}
 
+		if ( isset( $input['mini_bio_1'] ) ) {
+			$sanitary_values['mini_bio_1'] = esc_textarea( $input['mini_bio_1'] );
+		}
+
 		return $sanitary_values;
 	}
 
@@ -271,8 +344,15 @@ class HenriPourrat {
 
 	public function citations_1_par_lignes_0_callback() {
 		printf(
-			'<textarea class="large-text" rows="15" name="henri_pourrat_option_name[citations_1_par_lignes_0]" id="citations_1_par_lignes_0" placeholder="citation - livres">%s</textarea>',
+			'<textarea class="large-text" rows="5" name="henri_pourrat_option_name[citations_1_par_lignes_0]" id="citations_1_par_lignes_0">%s</textarea>',
 			isset( $this->henri_pourrat_options['citations_1_par_lignes_0'] ) ? esc_attr( $this->henri_pourrat_options['citations_1_par_lignes_0']) : ''
+		);
+	}
+
+	public function mini_bio_1_callback() {
+		printf(
+			'<textarea class="large-text" rows="5" name="henri_pourrat_option_name[mini_bio_1]" id="mini_bio_1">%s</textarea>',
+			isset( $this->henri_pourrat_options['mini_bio_1'] ) ? esc_attr( $this->henri_pourrat_options['mini_bio_1']) : ''
 		);
 	}
 
