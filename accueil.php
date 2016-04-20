@@ -36,19 +36,19 @@ get_header(); ?>
     </section>
     <section id="quote">
         <div class="wrapper">
-        <?php
-        $henri_pourrat_options = get_option('henri_pourrat_option_name');
-        $citations = $henri_pourrat_options['citations_1_par_lignes_0'];
-        $citations = explode("\n", $citations);
-        $week = date('W');
-        $week = count($citations) + 1 >= $week ? $week : count($citations) - 1;
-        $citations = explode('-', $citations[$week]);
-        $citation = trim($citations[0]);
-        $auteur = trim($citations[1]);
-        ?>
-        <p id="citation" class="italic"><?php echo $citation; ?></p>
-        <p id="auteur">Henri Pourrat, <span class="italic"><?php echo $auteur; ?></span></p>
-        <span class="triangle_bottom"></span>
+            <?php
+            $henri_pourrat_options = get_option('henri_pourrat_option_name');
+            $citations = $henri_pourrat_options['citations_1_par_lignes_0'];
+            $citations = explode("\n", $citations);
+            $week = date('W');
+            $week = count($citations) + 1 >= $week ? $week : count($citations) - 1;
+            $citations = explode('-', $citations[$week]);
+            $citation = trim($citations[0]);
+            $auteur = trim($citations[1]);
+            ?>
+            <p id="citation" class="italic"><?php echo $citation; ?></p>
+            <p id="auteur">Henri Pourrat, <span class="italic"><?php echo $auteur; ?></span></p>
+            <span class="triangle_bottom"></span>
         </div>
     </section>
 
@@ -81,11 +81,10 @@ get_header(); ?>
         <div class="wrapper">
             <span class="triangle_bottom border-white"></span>
             <h1>Événements</h1>
-            <?php  $args = array('post_type' => array('event'), 'posts_per_page' => 3);
+            <?php $args = array('post_type' => array('event'), 'posts_per_page' => 3);
 
             $query = new WP_Query($args);
-            if ($query->have_posts())
-            {
+            if ($query->have_posts()) {
                 while ($query->have_posts()) : $query->the_post();
                     $couverture = get_field('couverture_de_levenement');
                     $date = get_field('date');
@@ -95,7 +94,8 @@ get_header(); ?>
                     <a href="<?php the_permalink(); ?>">
                         <div class="article_container">
                             <div class="article_container_hover card_hover <?php echo $past; ?>">
-                                <div class="left thumb_article" style="background-image: url('<?php echo $couverture['sizes']['thumbnail']; ?>')">
+                                <div class="left thumb_article"
+                                     style="background-image: url('<?php echo $couverture['sizes']['thumbnail']; ?>')">
 
                                 </div>
                                 <div class="left">
@@ -136,45 +136,46 @@ get_header(); ?>
 
         $(window).resize(function () {
             $("#accueil_actu").css("margin-top", $(window).height());
-            coverflowInit();
+            bookCoverflow.init();
         });
 
-        function coverflowInit() {
+        var bookCoverflow = (function () {
 
-            $('#coverflow').coverflow({
-                active: <?php echo $middle; ?>,
-                select: function (event, ui) {
+            var self = {};
 
-                }
-            });
+            self.init = function () {
+                $('#coverflow').coverflow({
+                    active: Math.floor(document.getElementById('coverflow').querySelectorAll('img').length / 2)
+                });
+            }
 
-            $('.ui-state-active a').click(function (e) {
-                window.location = $this.attr('data-href');
-                e.stopPropagation();
-            });
+            function resizeCoverflow() {
+                bookCoverflow.init();
+            }
 
-            $("body").keydown(function (e) {
-                // left arrow
-                if ((e.keyCode || e.which) == 37) {
+            $('body').on('click', '.ui-state-active', function () {
+                    window.location = $(this).data('href');
+                })
+                .on('click', '#coverflow-background .fa-chevron-left', function () {
                     $('#coverflow').coverflow('prev');
-                }
-                // right arrow
-                if ((e.keyCode || e.which) == 39) {
+                })
+                .on('click', '#coverflow-background .fa-chevron-right', function () {
                     $('#coverflow').coverflow('next');
-                }
-            });
+                })
+                .on('keydown', function (e) {
+                    if ((e.keyCode || e.which) == 37) {
+                        $('#coverflow').coverflow('prev');
+                    }
+                    if ((e.keyCode || e.which) == 39) {
+                        $('#coverflow').coverflow('next');
+                    }
+                })
 
-        }
+            return self;
+        })();
 
-        $(document).ready(function(){
-           coverflowInit();
-            $('#coverflow-background .fa-chevron-right').click(function () {
-                $('#coverflow').coverflow('next');
-            });
-
-            $('#coverflow-background .fa-chevron-left').click(function () {
-                $('#coverflow').coverflow('prev');
-            });
+        $(document).ready(function () {
+            bookCoverflow.init();
         });
     </script>
 <?php

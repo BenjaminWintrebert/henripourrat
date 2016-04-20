@@ -39,7 +39,3 @@
     </header><!-- #masthead -->
 
     <div id="content" class="site-content">
-
-        <?php if (function_exists('yoast_breadcrumb')) {
-            yoast_breadcrumb('<p id="breadcrumbs">', '</p>');
-        } ?>
