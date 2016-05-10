@@ -3,14 +3,15 @@
 <html <?php language_attributes(); ?> style="margin-top: 0px!important;">
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="profile" href="http://gmpg.org/xfn/11">
     <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
-    <link rel="stylesheet" href="https://cdn.rawgit.com/coverflowjs/coverflow/master/dist/coverflow.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
     <?php wp_head(); ?>
 
+    <link rel="stylesheet" href="https://cdn.rawgit.com/coverflowjs/coverflow/master/dist/coverflow.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script type="text/javascript">
         var $ = jQuery.noConflict();
         $(document).ready(function () {
@@ -25,7 +26,7 @@
 <div id="page" class="site">
     <header id="masthead" class="site-header" role="banner">
         <nav id="site-navigation" class="main-navigation" role="navigation">
-            <img class='nav_logo' src="<?php echo get_template_directory_uri(); ?>/img/logo.png" alt="logo sahp"/>
+            <a href="<?= site_url(); ?>"> <img class='nav_logo' src="<?php echo get_template_directory_uri(); ?>/img/logo.png" alt="logo sahp"/></a>
             <div id="nav-icon2">
                 <span></span>
                 <span></span>

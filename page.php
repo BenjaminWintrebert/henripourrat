@@ -1,13 +1,8 @@
 <?php
 /**
- * The template for displaying all pages.
+ * The template for displaying all single posts.
  *
- * This is the template that displays all pages by default.
- * Please note that this is the WordPress construct of pages
- * and that other 'pages' on your WordPress site may use a
- * different template.
- *
- * @link https://codex.wordpress.org/Template_Hierarchy
+ * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#single-post
  *
  * @package Henri_Pourrat
  */
@@ -18,21 +13,33 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 
 			<?php
-			while ( have_posts() ) : the_post();
+			while (have_posts()) : the_post();
+				$couverture = get_field('couverture');
+				?>
 
-				get_template_part( 'template-parts/content', 'page' );
-
-				// If comments are open or we have at least one comment, load up the comment template.
-				if ( comments_open() || get_comments_number() ) :
-					comments_template();
-				endif;
+				<div class="post-cover" style="background-image:url(<?= $couverture['url']; ?>);">
+					<div class="post-gradient"></div>
+				</div>
+				<div class="post-top wrapper">
+					<div class="post-title">
+						<h1><?php echo the_title(); ?></h1>
+					</div>
+					<?php
+					if (function_exists('yoast_breadcrumb')) {
+						yoast_breadcrumb('<div id="breadcrumbs">', '</div>');
+					}
+					?>
+				</div>
+				<div class="post-article wrapper clearfix">
+					<?php the_content(); ?>
+				</div>
+				<?php
 
 			endwhile; // End of the loop.
 			?>
-
+			<span class="triangle_bottom border-white"></span>
 		</main><!-- #main -->
 	</div><!-- #primary -->
 
 <?php
-
 get_footer();
