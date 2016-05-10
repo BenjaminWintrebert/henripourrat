@@ -46,6 +46,7 @@ if (!function_exists('hp_setup')) :
         // This theme uses wp_nav_menu() in one location.
         register_nav_menus(array(
             'primary' => esc_html__('Primary', 'hp'),
+            'footer' => esc_html__('Footer', 'hp'),
         ));
 
         /*
@@ -138,7 +139,14 @@ add_action('wp_enqueue_scripts', 'hp_scripts');
 function the_thumb_url()
 {
     $thumb = wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), 'large');
-    echo $thumb[0];
+    if(empty($thumb))
+    {
+        $couverture = get_field('couverture');
+        echo $couverture['url'];
+    }
+    else {
+        echo $thumb[0];
+    }
 }
 
 add_action('get_header', 'remove_admin_login_header');
@@ -206,37 +214,14 @@ function my_custom_post_livre()
 
 add_action('init', 'my_custom_post_livre');
 
-function my_custom_post_event()
-{
-    $labels = array(
-        'name' => _x('Evénement', 'post type general name'),
-        'singular_name' => _x('event', 'post type singular name'),
-        'add_new' => _x('Ajouter', 'event'),
-        'add_new_item' => __('Ajouter un nouvel événement'),
-        'edit_item' => __('Éditer l\'événement'),
-        'new_item' => __('Nouvel événement'),
-        'all_items' => __('Tout les événement'),
-        'view_item' => __('Voir l\'événement'),
-        'search_items' => __('Rechercher un événement'),
-        'not_found' => __('Aucun événement trouvé'),
-        'not_found_in_trash' => __('Aucun événement dans la corbeille'),
-        'parent_item_colon' => '',
-        'menu_name' => 'Événement'
-    );
-    $args = array(
-        'labels' => $labels,
-        'hirarchical' => false,
-        'description' => 'Événement',
-        'public' => true,
-        'menu_position' => 6,
-        'supports' => array(),
-        'has_archive' => true,
-        'taxonomies' => array()
-    );
-    register_post_type('event', $args);
-}
+function default_comments_on( $data ) {
+    if( $data['post_type'] == 'event' ) {
+        $data['comment_status'] = 1;
+    }
 
-add_action('init', 'my_custom_post_event');
+    return $data;
+}
+add_filter( 'wp_insert_post_data', 'default_comments_on' );
 
 function month($date)
 {

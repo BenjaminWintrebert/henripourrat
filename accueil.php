@@ -7,7 +7,7 @@ Template Name: Accueil
 get_header(); ?>
     <section id="accueil_actu" class="bg-white clearfix pb70">
         <div class="wrapper">
-            <h1>Actualités</h1>
+            <h1>Actualités & Événements</h1>
             <?php query_posts('showposts=3');
             if (have_posts()) : while (have_posts()) : the_post(); ?>
                 <a href="<?php the_permalink(); ?>">
@@ -31,7 +31,8 @@ get_header(); ?>
                 </a>
             <?php endwhile; ?>
             <?php endif;
-            wp_reset_query(); ?>
+            wp_reset_query();
+            ?>
         </div>
     </section>
     <section id="quote">
@@ -66,8 +67,8 @@ get_header(); ?>
                     $image = get_field('image');
 
                     ?>
-                    <a data-href='<?php the_field('page_link'); ?>'><img src="<?php echo $image['url']; ?>"
-                                                                         alt="<?php echo $image['alt']; ?>"/></a>
+                    <a data-href='<?= the_permalink(); ?>'><img src="<?php echo $image['url']; ?>"
+                                                                alt="<?php echo $image['alt']; ?>"/></a>
 
                 <?php endwhile; ?>
             </div>
@@ -77,45 +78,11 @@ get_header(); ?>
             </div>
         </div>
     </section>
-    <section id="event" class="bg-white clearfix pb70">
+    <section id="newsletter" class="bg-white">
         <div class="wrapper">
-            <span class="triangle_bottom border-white"></span>
-            <h1>Événements</h1>
-            <?php $args = array('post_type' => array('event'), 'posts_per_page' => 3);
-
-            $query = new WP_Query($args);
-            if ($query->have_posts()) {
-                while ($query->have_posts()) : $query->the_post();
-                    $couverture = get_field('couverture_de_levenement');
-                    $date = get_field('date');
-                    date('Y-m-d', strtotime($date)) > date('Y-m-d') ? $past = '' : $past = 'past';
-                    ?>
-
-                    <a href="<?php the_permalink(); ?>">
-                        <div class="article_container">
-                            <div class="article_container_hover card_hover <?php echo $past; ?>">
-                                <div class="left thumb_article"
-                                     style="background-image: url('<?php echo $couverture['sizes']['thumbnail']; ?>')">
-
-                                </div>
-                                <div class="left">
-                                    <div class="triangle_left card_fleche"></div>
-                                    <div class="text">
-                                        <div class="article_container_date"><span
-                                                class="the_date"><?php echo month(date('d n Y', strtotime($date))); ?></span>
-                                        </div>
-                                        <div class="article_container_title"><span
-                                                class="the_title"><?php the_title(); ?></span></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                <?php endwhile;
-            } else {
-
-            }
-            wp_reset_query(); ?>
+            <?php $widgetNL = new WYSIJA_NL_Widget(true);
+            echo $widgetNL->widget(array('form' => 2, 'form_type' => 'php'));
+            ?>
         </div>
     </section>
     <section id="parallax-henri">
@@ -145,7 +112,7 @@ get_header(); ?>
 
             self.init = function () {
                 $('#coverflow').coverflow({
-                    active: Math.floor(document.getElementById('coverflow').querySelectorAll('img').length / 2)
+                    active: <?php echo $middle; ?>
                 });
             }
 
@@ -156,20 +123,12 @@ get_header(); ?>
             $('body').on('click', '.ui-state-active', function () {
                     window.location = $(this).data('href');
                 })
-                .on('click', '#coverflow-background .fa-chevron-left', function () {
+                .on('click', '#coverflow-controls .fa-chevron-left', function () {
                     $('#coverflow').coverflow('prev');
                 })
-                .on('click', '#coverflow-background .fa-chevron-right', function () {
+                .on('click', '#coverflow-controls .fa-chevron-right', function () {
                     $('#coverflow').coverflow('next');
-                })
-                .on('keydown', function (e) {
-                    if ((e.keyCode || e.which) == 37) {
-                        $('#coverflow').coverflow('prev');
-                    }
-                    if ((e.keyCode || e.which) == 39) {
-                        $('#coverflow').coverflow('next');
-                    }
-                })
+                });
 
             return self;
         })();
