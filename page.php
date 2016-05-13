@@ -18,7 +18,6 @@ get_header(); ?>
 				?>
 
 				<div class="post-cover" style="background-image:url(<?= $couverture['url']; ?>);">
-					<div class="post-gradient"></div>
 				</div>
 				<div class="post-top wrapper">
 					<div class="post-title">

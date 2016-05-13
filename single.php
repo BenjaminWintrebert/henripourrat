@@ -14,26 +14,27 @@ get_header(); ?>
 
             <?php
             while (have_posts()) : the_post();
-                $event = get_field('evenement');
-                (!$event) ? $location = get_field('adresse') : '';
-                (!$event) ? $date = get_field('date') : '';
+                $event = get_field_object('event');
+                $event = $event['value'][0];
+                (!empty($event)) ? $location = get_field('adresse') : '';
+                (!empty($event)) ? $date = get_field('date') : '';
                 $couverture = get_field('couverture');
                 ?>
 
                 <div class="post-cover" style="background-image:url(<?= $couverture['url']; ?>);">
-                    <div class="post-gradient"></div>
                 </div>
                 <div class="post-top wrapper">
                     <div class="post-title">
                         <h1><?php echo the_title(); ?></h1>
                         <div class="post-info">
-                            <?php if ('event' == get_post_type()) : ?>
+                            <?php if (!empty($event)) : ?>
                                 <i class="fa fa-map-marker" aria-hidden="true"></i> <?= $location['address']; ?>
                                 <i class="fa fa-clock-o"
                                    aria-hidden="true"></i><?= month(date('d n Y', strtotime($date))); ?>
                             <?php endif; ?>
                         </div>
                     </div>
+                    <div id="share-it"><p>Partager : <a href="https://www.facebook.com/sharer/sharer.php?u=<?php echo urlencode(get_permalink());?>/"><i class="fa fa-facebook-official" aria-hidden="true"></i></a> <a href="https://twitter.com/home?status=<?php echo urlencode(the_title().' - '.get_permalink()); ?>"><i class="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://plus.google.com/share?url=<?php echo urlencode(get_permalink());?>"><i class="fa fa-google-plus" aria-hidden="true"></i></a></p></div>
                     <?php
                     if (function_exists('yoast_breadcrumb')) {
                         yoast_breadcrumb('<div id="breadcrumbs">', '</div>');
@@ -44,7 +45,7 @@ get_header(); ?>
                     <?php the_content(); ?>
 
 
-                    <?php if ('event' == get_post_type()) :
+                    <?php if (!empty($event)) :
                         if (!empty($location)):
                             ?>
                             <div class="acf-map">
@@ -52,7 +53,8 @@ get_header(); ?>
                                      data-lng="<?php echo $location['lng']; ?>"></div>
                             </div>
                         <?php endif;
-                    endif; ?>
+                    endif;
+                    ?>
                 </div>
 
                 <?php wp_related_posts() ?>

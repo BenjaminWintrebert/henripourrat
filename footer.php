@@ -20,6 +20,7 @@
 				<a href=""><span class="fa flaticon-social-1"></span></a>
 				<a href=""><span class="fa flaticon-circle"></span></a>
 				<a href=""><span class="fa flaticon-social-2"></span></a>
+				<a href="<?php bloginfo('rss2_url'); ?>"><span class="fa fa-rss"></span></a>
 			</div>
 		</div>
 		<div id="link-footer">
