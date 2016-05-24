@@ -54,7 +54,7 @@ get_header(); ?>
     <section id="coverflow-section">
         <div id="coverflow-container">
             <div class="wrapper">
-                <h1>Oeuvres de l'auteur</h1>
+                <h1>Livres</h1>
             </div>
             <div id="coverflow">
                 <?php

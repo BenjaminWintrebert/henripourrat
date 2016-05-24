@@ -9,6 +9,11 @@
  * @package Henri_Pourrat
  */
 
+$henri_pourrat_options = get_option( 'henri_pourrat_option_name' );
+$facebook_1 = $henri_pourrat_options['facebook_1'];
+$twitter_2 = $henri_pourrat_options['twitter_2'];
+$instagram_3 = $henri_pourrat_options['instagram_3'];
+$flickr_4 = $henri_pourrat_options['flickr_4'];
 ?>
 
 	</div><!-- #content -->
@@ -16,10 +21,10 @@
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div id="social-network">
 			<div class="wrapper">
-				<a href=""><span class="fa flaticon-social"></span></a>
-				<a href=""><span class="fa flaticon-social-1"></span></a>
-				<a href=""><span class="fa flaticon-circle"></span></a>
-				<a href=""><span class="fa flaticon-social-2"></span></a>
+				<?php echo !empty($facebook_1) ? '<a href=""><span class="fa flaticon-social"></span></a>' : ''; ?>
+				<?php echo !empty($twitter_2) ? '<a href=""><span class="fa flaticon-social-1"></span></a>' : ''; ?>
+				<?php echo !empty($instagram_3) ? '<a href=""><span class="fa flaticon-social-circle"></span></a>' : ''; ?>
+				<?php echo !empty($flickr_4) ? '<a href=""><span class="fa flaticon-social-2"></span></a>' : ''; ?>
 				<a href="<?php bloginfo('rss2_url'); ?>"><span class="fa fa-rss"></span></a>
 			</div>
 		</div>
